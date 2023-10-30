@@ -1,0 +1,11 @@
+{
+  "COMMON_CONFIG": {
+      "USING_DATA_COMPY": "False",
+      "DISPLAY_DATA": "True",
+      "BASE_PATH": "{home_dir}/validation_framework",
+      "LOG_MODE": "console",
+      "DATA": {
+          "SYSTEM_TIMEZONE": "UTC"
+      }
+  }
+}

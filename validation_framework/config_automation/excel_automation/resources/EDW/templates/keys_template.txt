@@ -1,0 +1,81 @@
+{
+  {%- for task in tasks %}
+    "{{task.table_name}}": {
+        "SEQ_NO": "{{task.seq_no}}",
+        "GROUP": "{{task.group}}",
+        "SAMPLE_RECORD_COUNT": "{{task.sample_record_count}}",
+        "COMPARISON_TYPE": "{{task.comparison_type}}",
+        "COMPARISON_CRITERIA": "{{task.comparison_criteria}}",{%- if task.date_time_columns != '' %}
+        "DATE_TIME_COLUMNS": [
+        {%- for date_time_column in task.date_time_columns -%}
+            "{{- date_time_column -}}"{{"," if not loop.last}}
+        {%- endfor %}],{% else %}
+        "DATE_TIME_COLUMNS": [],{% endif %}{%- if task.join_keys != '' %}
+        "JOIN_KEYS": [
+        {%- for join_key in task.join_keys -%}
+            "{{- join_key -}}"{{"," if not loop.last}}
+        {%- endfor %}],{% else %}
+        "JOIN_KEYS": [],{% endif %}{%- if task.date_type_group_by_keys != '' %}
+        "DATE_TYPE_GROUP_BY_KEYS": [
+        {%- for date_type_group_by_key in task.date_type_group_by_keys -%}
+            "{{- date_type_group_by_key -}}"{{"," if not loop.last}}
+        {%- endfor %}],{% else %}
+        "DATE_TYPE_GROUP_BY_KEYS": [],{% endif %}{%- if task.other_group_by_keys != '' %}
+        "OTHER_GROUP_BY_KEYS": [
+        {%- for other_group_by_key in task.other_group_by_keys -%}
+            "{{- other_group_by_key -}}"{{"," if not loop.last}}
+        {%- endfor %}],{% else %}
+        "OTHER_GROUP_BY_KEYS": [],{% endif %}{%- if task.amount_columns != '' %}
+        "AMOUNT_COLUMNS": [
+        {%- for amount_column in task.amount_columns -%}
+            "{{- amount_column -}}"{{"," if not loop.last}}
+        {%- endfor %}],{% else %}
+        "AMOUNT_COLUMNS": [],{% endif %}{%- if task.type_code_columns != '' %}
+        "TYPE_CODE_COLUMNS": [
+        {%- for type_code_column in task.type_code_columns -%}
+            "{{- type_code_column -}}"{{"," if not loop.last}}
+        {%- endfor %}],{% else %}
+        "TYPE_CODE_COLUMNS": [],{% endif %}{%- if task.check_null_columns != '' %}
+        "CHECK_NULL_COLUMNS": [
+        {%- for check_null_column in task.check_null_columns -%}
+            "{{- check_null_column -}}"{{"," if not loop.last}}
+        {%- endfor %}],{% else %}
+        "CHECK_NULL_COLUMNS": [],{% endif %}{%- if task.where_clause_to_be_used_for_counts != '' %}
+        "WHERE_CLAUSE_TO_BE_USED_FOR_COUNTS": "{{task.where_clause_to_be_used_for_counts}}",{% endif %}{%- if task.run_for_whole_table != '' %}
+        "RUN_FOR_WHOLE_TABLE": "{{task.run_for_whole_table}}",{% endif %}{%- if task.where_clause != '' %}
+        "WHERE_CLAUSE": "{{task.where_clause}}",{% endif %}{%- if task.select_columns != '' %}
+        "SELECT_COLUMNS": [
+        {%- for select_column in task.select_columns -%}
+            "{{- select_column -}}"{{"," if not loop.last}}
+        {%- endfor %}],{% endif %}{%- if task.ignore_columns != '' %}
+        "IGNORE_COLUMNS": [
+        {%- for ignore_column in task.ignore_columns -%}
+            "{{- ignore_column -}}"{{"," if not loop.last}}
+        {%- endfor %}],{% endif %}
+        "TABLE_1_DETAILS": {
+            "FULL_TABLE_NAME": "{{task.table_full_name_1}}"{%- if task.where_clause_1 != '' %},
+            "WHERE_CLAUSE": "{{task.where_clause_1}}"{% endif %}{%- if task.select_columns_1 != '' %},
+            "SELECT_COLUMNS": [
+            {%- for select_column in task.select_columns_1 -%}
+                "{{- select_column -}}"{{"," if not loop.last}}
+            {%- endfor %}]{% endif %}{%- if task.ignore_columns_1 != '' %},
+            "IGNORE_COLUMNS": [
+            {%- for ignore_column in task.ignore_columns_1 -%}
+                "{{- ignore_column -}}"{{"," if not loop.last}}
+            {%- endfor %}]{% endif %}
+        },
+        "TABLE_2_DETAILS": {
+            "FULL_TABLE_NAME": "{{task.table_full_name_2}}"{%- if task.where_clause_2 != '' %},
+            "WHERE_CLAUSE": "{{task.where_clause_2}}"{% endif %}{%- if task.select_columns_2 != '' %},
+            "SELECT_COLUMNS": [
+            {%- for select_column in task.select_columns_2 -%}
+                "{{- select_column -}}"{{"," if not loop.last}}
+            {%- endfor %}]{% endif %}{%- if task.ignore_columns_2 != '' %},
+            "IGNORE_COLUMNS": [
+            {%- for ignore_column in task.ignore_columns_2 -%}
+                "{{- ignore_column -}}"{{"," if not loop.last}}
+            {%- endfor %}]{% endif %}
+        }
+    }{{ "," if not loop.last else "" }}
+  {%- endfor %}
+}

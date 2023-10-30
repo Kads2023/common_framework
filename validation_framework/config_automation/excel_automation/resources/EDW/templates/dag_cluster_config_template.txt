@@ -1,0 +1,39 @@
+{
+  "name": "validation-cluster-group-{{default.group}}",
+  "projectId": "<>",
+  "computeCommonConfig": {
+    "internalIpOnly": true,
+    "tags": [
+      "version-v1"
+    ]
+  },
+  "initializationActions": [
+    "artifactory://spark-bq/init_action_validation_268.sh"
+  ],
+  "master": {
+    "disk": {
+      "DiskType": "pd-standard",
+      "numLocalSsds": 0,
+      "sizeInGb": 500
+    },
+    "type": "n1-highmem-8"
+  },
+  "workers": {
+    "disk": {
+      "DiskType": "pd-standard",
+      "numLocalSsds": 0,
+      "sizeInGb": 200
+    },
+    "type": "n1-highmem-16",
+    "numInstances": 10
+  },
+  "secondaryWorkers": {
+    "disk": {
+      "DiskType": "pd-standard",
+      "numLocalSsds": 0,
+      "sizeInGb": 100
+    },
+    "type": "n1-highmem-16",
+    "numInstances": 2
+  }
+}

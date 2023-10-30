@@ -1,0 +1,63 @@
+{
+  "COMMON_CONFIG": {
+    "TAG": "<>",
+    "USING_DATA_COMPY": "False",
+    "CHECK_SAMPLE_DATA": "True",
+    "CHECK_COUNTS": "True",
+    "USING_TEMP_TABLE": "True",
+    "COMPARISON_TYPE": "<>",
+    "KM_APP_NAME": "<>",
+    "KM_ENDPOINT": "https://",
+    "DISPLAY_DATA": "False",
+    "BASE_PATH": "{home_dir}/validation_framework",
+    "COMMON_BASE_PATH": "{base_path}/common_validate",
+    "XP_BASE_PATH": "{base_path}/{tenant}_validate",
+    "SKIP_JOBS_FILE": "{xp_base_path}/conf/skip_job.txt",
+    "LOG_PATH": "{base_path}/{tenant}_validate/logs/{run_date}",
+    "LOG_PATTERN": "validation_logger_{tenant}_{validation_key_name}_{validation_type}_{validation_sub_type}_{run_date}_{date_time_str}",
+    "LOG_HANDLERS": "debug,info,error",
+    "LOG_MODE": "file",
+    "DATA": {
+      "SYSTEM_TIMEZONE": "PST8PDT"
+    }
+  },
+  "BQ_BQ": {
+    "LABEL": "BQ_BQ",
+    "DATA": {
+      "DATATYPE_MAPPING": {
+        "DATETIME": [
+          "TIMESTAMP"
+        ],
+        "TIMESTAMP": [
+          "DATETIME"
+        ]
+      }
+    },
+    "BQ_CONFIG": {
+      "CONVERT_COLUMN_NAMES_TO_LOWER_CASE": "True",
+      "IDENTITY": "{common_base_path}/conf/adjacencies_connector_identity.txt",
+      "KM_CREDENTIALS_JSON": "<>",
+      "GCS_PROJECT": "<>",
+      "PARENT_PROJECT": "<>",
+      "MATERIALIZATION_DATASET": "<>",
+      "TEMP_GCS_BUCKET_NAME": "<>",
+      "DATATYPE_TRANSFORM": {
+        "DATE": "STRING",
+        "DATETIME": "STRING",
+        "TIMESTAMP": "STRING",
+        "TIME": "STRING",
+        "BIGNUMERIC": "STRING",
+        "NUMERIC": "STRING"
+      },
+      "RESULTS": {
+        "BQ_PROJECT": "<>",
+        "DATASET": "<>",
+        "COUNT_SUMMARY_RESULTS": "<>.recon_count_summary",
+        "COUNT_DETAILS_RESULTS": "<>.recon_count_details",
+        "SAMPLE_DATA_SUMMARY_RESULTS": "<>.recon_sample_data_summary",
+        "SAMPLE_DATA_ROW_MISSING_RESULTS": "<>.recon_sample_data_row_missing",
+        "SAMPLE_DATA_COLUMN_MISMATCH_RESULTS": "<>.recon_sample_data_column_mismatch"
+      }
+    }
+  }
+}

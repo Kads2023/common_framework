@@ -1,0 +1,18 @@
+{%- for task in tasks %}
+
+--{{task.table_name}}--
+
+nohup /cloudcli/cloudprovisioncli/cloud dataproc job submit --type PY_SPARK --file
+gs://example-validations/spark-bigquery-with-dependencies_2.11-0.29.0.jar
+--main gs://example-validations/example_dp_driver.py --appId <> --scope <>
+--init-actions artifactory://init_action_validation_268.sh --args --run_date=20230523
+--args --validation_date=2023-05-21
+--args --validation_key_name={{task.table_name}}
+--args --tenant=example
+--args --using_spark=True
+--args --using_data_compy=False
+--args --check_counts=True
+--args --use_default_keys_file=True > /logs/example_dp_driver_20230524_{{task.table_name}}.log &
+
+
+{%- endfor %}

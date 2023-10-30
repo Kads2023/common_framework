@@ -1,0 +1,18 @@
+{
+  "configs": [
+    {%- for task in tasks %} {
+        "args": ["--run_date=20230625",
+                "--validation_date=2023-06-23",
+                "--validation_key_name={{task.table_name}}",
+                "--tenant=example", "--using_spark=True",
+                "--using_data_compy=False",
+                "--check_counts=True",
+                "--use_default_keys_file=True"{%- if task.run_summary_only == 'True' %},
+                "--run_summary_only={{task.run_summary_only}}"{% endif %}
+                ],
+        "run": "gs://example-validations/example_dp_driver.py",
+        "type": "PY_SPARK"
+    }{{ "," if not loop.last else "" }}
+    {%- endfor %}
+  ]
+}

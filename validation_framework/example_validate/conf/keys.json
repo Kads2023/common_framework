@@ -1,0 +1,24 @@
+{
+    "<table_name_1>": {
+        "SEQ_NO": "1",
+        "GROUP": "1",
+        "SAMPLE_RECORD_COUNT": "100",
+        "COMPARISON_TYPE": "<>",
+        "COMPARISON_CRITERIA": "validation_date",
+        "DATE_TIME_COLUMNS": ["",""],
+        "JOIN_KEYS": [""],
+        "DATE_TYPE_GROUP_BY_KEYS": [""],
+        "OTHER_GROUP_BY_KEYS": [],
+        "AMOUNT_COLUMNS": ["",""],
+        "TYPE_CODE_COLUMNS": ["",""],
+        "CHECK_NULL_COLUMNS": [],
+        "WHERE_CLAUSE_TO_BE_USED_FOR_COUNTS": "True",
+        "WHERE_CLAUSE": "CAST(<> AS DATE) = 'validation_date'",
+        "TABLE_1_DETAILS": {
+            "FULL_TABLE_NAME": "<>"
+        },
+        "TABLE_2_DETAILS": {
+            "FULL_TABLE_NAME": "<>"
+        }
+    }
+}

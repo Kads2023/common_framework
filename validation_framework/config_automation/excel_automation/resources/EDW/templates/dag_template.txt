@@ -1,0 +1,87 @@
+import datetime as dt
+import pendulum
+from datetime import datetime
+from airflow import DAG
+from airflow.operators.bash_operator import BashOperator
+from airflow.operators.python_operator import PythonOperator
+from utils.iris_alerts import alert_to_iris
+from utils.job_arguments import set_job_arguments_validations
+from airflow.utils.trigger_rule import TriggerRule
+
+dag_name = "RECON_{{default.group}}"
+schedule_interval_mins = 1440
+required_validation_delay = 2
+local_tz = pendulum.timezone("America/Los_Angeles")
+
+default_args = {
+    'owner': '<>',
+    'depends_on_past': True,
+    'start_date': datetime(2023, 7, 4, 0, tzinfo=local_tz),
+    'email': [''],
+    'email_on_failure': True,
+    'email_on_retry': True,
+    'retries': 1,
+    'retry_delay': dt.timedelta(minutes=5),
+    'on_failure_callback': alert_to_iris,
+    'run_as_user': '<>',
+    'queue': '<>',
+    'pool': '<>',
+    'wait_for_downstream': True
+}
+
+bash_command_create_cluster = '''
+sh /create_cluster.sh 'group-{{default.group}}'
+'''
+
+bash_command = '''
+. dataproc_profile;
+/cloudcli/cloudprovisioncli/cloud dataproc workflow submit \
+--file gs://example-validations/spark-bigquery-with-dependencies_2.11-0.29.0.jar \
+--appId <> --scope <> --cluster-name validation-cluster-group-{{default.group}} \
+--job-config /example_validation_conf/job_configs/job_config_{{default.group}}.json \
+--disable-workflow-timeout
+'''
+
+bash_command_delete_cluster = '''
+. /dataproc_profile;
+/cloudcli/cloudprovisioncli/cloud dataproc cluster delete \
+validation-cluster-group-{{default.group}} --appId <> --scope <>
+'''
+
+with DAG(dag_name,
+         default_args=default_args,
+         schedule_interval='0 16 */1 * *',
+         catchup=True,
+         max_active_runs=1,
+         tags=[""]
+         ) as dag:
+
+    PPAS_SET_JOB_ARGUMENTS = PythonOperator(
+        task_id='PPAS_SET_JOB_ARGUMENTS',
+        provide_context=True,
+        python_callable=set_job_arguments_validations,
+        op_kwargs={'local_tz': local_tz, 'schedule_interval_mins': schedule_interval_mins,
+                   'required_validation_delay': required_validation_delay, 'group_id': '{{default.group}}'}
+    )
+
+    CREATE_CLUSTER_{{default.group}} = BashOperator(
+        task_id='CREATE_CLUSTER_{{default.group}}',
+        bash_command=bash_command_create_cluster
+    )
+
+    RECON_{{default.group}} = BashOperator(
+        task_id='RECON_{{default.group}}',
+        bash_command=bash_command
+    )
+
+    DELETE_CLUSTER_{{default.group}} = BashOperator(
+        task_id='DELETE_CLUSTER_{{default.group}}',
+        trigger_rule=TriggerRule.ALL_DONE,
+        bash_command=bash_command_delete_cluster
+    )
+
+PPAS_SET_JOB_ARGUMENTS \
+    >> CREATE_CLUSTER_{{default.group}} \
+    >> RECON_{{default.group}} \
+    >> DELETE_CLUSTER_{{default.group}}
+
